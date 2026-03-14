@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "414405662279",
+    "project_id": "actechnician-app",
+    "storage_bucket": "actechnician-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:414405662279:android:f84b53da527f44303f8362",
+        "android_client_info": {
+          "package_name": "com.acd_technician"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY29nOI8mKBUa3kn-YeVkFLoglrCdE-b8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
