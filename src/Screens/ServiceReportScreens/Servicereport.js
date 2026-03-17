@@ -207,7 +207,6 @@ const Servicereport = ({ route }) => {
   const listHeight = Math.min(selectedList.length * ITEM_HEIGHT, MAX_HEIGHT);
   const [serviceData, setServiceData] = useState([]);
   const preparePayload = () => {
-    console.log('this is final service Data', serviceData);
     let servData = serviceData.map(item => ({
       serviceDetailId: item._id,
       // serviceDetailId: item?.serviceId,
@@ -250,7 +249,7 @@ const Servicereport = ({ route }) => {
 
     return {
       bookingId: route?.params?.Data?._id,
-      technician: route?.params?.Data?.technician, // JAtin Here You have to put Technician ID But currently not comming from backend so put any id for testing purpose
+      technician: route?.params?.Data?.technician,
       customer: {
         name: Datafc?.name || '',
         contactNumber: Datafc?.phoneNumber || '',
@@ -328,6 +327,7 @@ const Servicereport = ({ route }) => {
 
     // return
   };
+
   const centeralService = async () => {
     setLoading(true);
 
@@ -342,7 +342,6 @@ const Servicereport = ({ route }) => {
           },
         },
       );
-      console.log(res, 'secon Api response');
       if (res?.status === 'success') {
         navigation.dispatch(
           CommonActions.reset({
@@ -366,20 +365,16 @@ const Servicereport = ({ route }) => {
     setServiceData(prevData =>
       prevData.map((item, i) => {
         if (i !== index) return item; // untouched objects stay same
-
         const updatedMaterials = item.materials.map((mat, mIndex) => {
           if (mIndex !== ind) return mat;
-
           const quantity = Number(text || 0);
           const rate = Number(mat.rate || 0);
-
           return {
             ...mat,
             quantity: text,
             amount: quantity * rate,
           };
         });
-
         return {
           ...item,
           materials: updatedMaterials,
@@ -392,9 +387,7 @@ const Servicereport = ({ route }) => {
     setServiceData(prevData =>
       prevData.map((item, i) => {
         if (i !== index) return item; // untouched objects stay same
-
         const updatedMaterials = item.materials;
-
         return {
           ...item,
           materials: [...updatedMaterials, material],
@@ -402,16 +395,13 @@ const Servicereport = ({ route }) => {
       }),
     );
   };
-
   const onRemoveFromIndex = (index, ind) => {
     setServiceData(prevData =>
       prevData.map((item, i) => {
         if (i !== index) return item;
-
         const updatedMaterials = item.materials.filter(
           (_, mIndex) => mIndex !== ind,
         );
-
         return {
           ...item,
           materials: updatedMaterials,
@@ -419,7 +409,7 @@ const Servicereport = ({ route }) => {
       }),
     );
   };
-
+  const [ModelVisible, setModelVisible] = useState(false);
   return (
     <MainContainer>
       <Header title={i18n.t('JobHistory')} />
@@ -897,12 +887,45 @@ const Servicereport = ({ route }) => {
       />
 
       <PrimaryButton
-        onPress={onSubmit}
+        onPress={() => {
+          setModelVisible(true);
+        }}
         // disabled={!isFormValid()}
-        title={i18n.t('Submit')}
+        title={i18n.t('Continue')}
         style={{ marginTop: 20 }}
         loading={Loading}
       />
+      <Modal visible={ModelVisible} transparent={true} animationType="slide">
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.3)', // transparent background
+          }}
+        >
+          <View
+            style={{
+              width: '100%',
+              padding: 20,
+              backgroundColor: Colors?.lightGray,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{
+                color: Colors?.white,
+                fontSize: rf(22),
+                fontFamily: Fonts?.pop600,
+              }}
+            >
+              Payment
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </MainContainer>
   );
 };

@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.acdoctor.in/api/v1',
-  // baseURL: 'http://137.59.53.70:8080/api/v1',
-  // baseURL: 'http://192.168.1.21:8080/api/v1',
+  // baseURL: 'https://api.acdoctor.in/api/v1', // prodiuction
+  baseURL: 'https://api-dev.acdoctor.in/api/v1', //Develo
   // baseURL: 'https://hematoid-autohypnotic-rey.ngrok-free.dev/api/v1',
   // baseURL: 'https://drusilla-watchful-overlavishly.ngrok-free.dev/api/v1',
   headers: {

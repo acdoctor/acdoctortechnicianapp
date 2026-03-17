@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+
 import React, { useState } from 'react';
 import MainContainer from '../../components/MainContainer';
 import { Styles } from './Style';
@@ -29,11 +31,15 @@ const Login = ({ route }) => {
   const isValidNumber = phone.length === 10;
 
   const HandlePress = async () => {
+    await messaging().registerDeviceForRemoteMessages();
+    const token = await messaging().getToken();
+    console.log(token, 'lemda');
     if (loading) return;
     const body = {
       countryCode: '+91',
       phoneNumber: phone,
       type: type,
+      // deviceToken: token,
     };
     console.log(body, 'asdfghjkl');
     try {

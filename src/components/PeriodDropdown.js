@@ -85,7 +85,6 @@ const PeriodDropdown = ({ onPeriodChange }) => {
           >
             <Text
               allowFontScaling={false}
-              allowFontScaling={false}
               style={{
                 textAlign: 'center',
                 color: Colors.white,
@@ -105,7 +104,6 @@ const PeriodDropdown = ({ onPeriodChange }) => {
             }}
           >
             <Text
-              allowFontScaling={false}
               allowFontScaling={false}
               style={{
                 textAlign: 'center',
