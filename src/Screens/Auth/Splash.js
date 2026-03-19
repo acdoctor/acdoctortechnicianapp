@@ -100,6 +100,7 @@ const Splash = () => {
                 });
               }, 2000);
             } else if (response?.data?.status === 'AVAILABLE') {
+              await AsyncStorage.setItem('Type', response?.data?.type);
               // Alert.alert('pop');
               await AsyncStorage.setItem('helper', response?.data?.position);
               if (response?.data?.type === 'ACD') {

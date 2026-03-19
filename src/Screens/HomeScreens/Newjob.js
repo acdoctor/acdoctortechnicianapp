@@ -26,7 +26,6 @@ const Newjob = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   // const retryTimeoutRef = useRef(null);
-  console.log(data, 'asd');
 
   const retryTimeoutRef = useRef(null);
 
@@ -40,40 +39,18 @@ const Newjob = () => {
 
     try {
       setLoading(true);
-      const res = await apiService.get('/technician/bookings', {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await apiService.get(
+        `/technician/bookings?page=1&limit=20&status=${'TECHNICIAN_ASSIGNED'},${'IN_PROGRESS'}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
-      // if (res.status === 'success') {
-      //   setData(res.data);
-      // }
+      console.log(res, 'lol');
       if (res.status === 'success') {
-        const filteredJobs = res.data.filter(
-          item =>
-            item.status === 'TECHNICIAN_ASSIGNED' ||
-            item.status === 'IN_PROGRESS',
-        );
-
-        // Optional: TECHNICIAN_ASSIGNED ko top pe lane ke liye
-        const sortedData = filteredJobs.sort((a, b) => {
-          if (
-            a.status === 'TECHNICIAN_ASSIGNED' &&
-            b.status !== 'TECHNICIAN_ASSIGNED'
-          ) {
-            return -1;
-          }
-          if (
-            b.status === 'TECHNICIAN_ASSIGNED' &&
-            a.status !== 'TECHNICIAN_ASSIGNED'
-          ) {
-            return 1;
-          }
-          return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-
-        setData(sortedData);
+        setData(res?.data);
       }
     } catch (error) {
       Alert.alert('API Error');

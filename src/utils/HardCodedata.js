@@ -72,16 +72,22 @@ export const Contracthomescreedata = () => [
     img: images.newJobimg,
     screenName: 'Newjob',
   },
-
   {
-    id: '5',
+    id: '2',
+    type: 'item',
+    title: `${i18n.t('JobHistory')}`,
+    img: images.servicereportimg,
+    screenName: 'Services',
+  },
+  {
+    id: '3',
     type: 'item',
     title: `${i18n.t('Performance')}`,
     img: images.perforamceimg,
     screenName: 'Performance',
   },
   {
-    id: '6',
+    id: '4',
     type: 'item',
     title: `${i18n.t('Payment')}`,
     img: images.payment,

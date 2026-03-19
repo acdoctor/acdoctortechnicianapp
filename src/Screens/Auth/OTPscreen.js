@@ -24,6 +24,7 @@ const OTPscreen = ({ route }) => {
   const isOtpValid = otp.join('').length === 4 && !expired;
 
   const handleVerify = async () => {
+    setLoading(true);
     if (Loading) return;
     if (expired) {
       Toast.show({
@@ -133,7 +134,7 @@ const OTPscreen = ({ route }) => {
           }
         } catch (error) {
         } finally {
-          setLoading(false);
+          // setLoading(false);cd
         }
 
         // navigation.reset({

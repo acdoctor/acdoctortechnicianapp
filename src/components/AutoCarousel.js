@@ -37,6 +37,7 @@ const AutoCarousel = ({
   return (
     <View>
       <FlatList
+        showsVerticalScrollIndicator={false}
         ref={flatListRef}
         data={data}
         horizontal

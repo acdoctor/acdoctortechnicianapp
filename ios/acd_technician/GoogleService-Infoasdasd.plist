@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.acdoctortechnicain</string>
+	<string>com.acdtechnician.app</string>
 	<key>PROJECT_ID</key>
 	<string>actechnician-app</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:414405662279:ios:a548074d4b70ed0a3f8362</string>
+	<string>1:414405662279:ios:781605f3d6382a773f8362</string>
 </dict>
 </plist>

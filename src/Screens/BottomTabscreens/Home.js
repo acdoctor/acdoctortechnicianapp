@@ -31,14 +31,19 @@ const { width } = Dimensions.get('window');
 const CARD_SIZE = width / 3 - 20;
 
 const Home = () => {
-  const type = AsyncStorage.getItem('Type');
-  const name = AsyncStorage.getItem('name');
+  const [name, setname] = useState('');
   const [helperType, settype] = useState('');
+  const [FCType, setFCtype] = useState('');
+
   const getttype = async () => {
+    const name = AsyncStorage.getItem('name');
+    setname(name);
+    const type = await AsyncStorage.getItem('Type');
+
+    setFCtype(type);
     const HelperType = await AsyncStorage.getItem('helper');
     settype(HelperType);
   };
-  console.log(helperType, 'ppp');
 
   useEffect(() => {
     getttype();
@@ -90,7 +95,7 @@ const Home = () => {
       <QuickAccessGrid
         helperType={helperType}
         title={i18n.t('QuickAccess')}
-        data={type === 'FC' ? Contracthomescreedata() : homescreedata()}
+        data={FCType === 'FC' ? Contracthomescreedata() : homescreedata()}
         onPressItem={item => {
           if (item.screenName) {
             navigation.navigate(item.screenName);

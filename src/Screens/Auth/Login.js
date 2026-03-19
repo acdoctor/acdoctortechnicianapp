@@ -22,6 +22,7 @@ import apiService from '../../Services/apiService';
 import PrimaryButton from '../../components/PrimaryButton';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 const Login = ({ route }) => {
   const { type } = route.params;
   console.log(type, 'asd');
@@ -33,7 +34,7 @@ const Login = ({ route }) => {
   const HandlePress = async () => {
     await messaging().registerDeviceForRemoteMessages();
     const token = await messaging().getToken();
-    console.log(token, 'lemda');
+    console.log(token, 'FCM Token');
     if (loading) return;
     const body = {
       countryCode: '+91',
@@ -50,6 +51,7 @@ const Login = ({ route }) => {
       if (response?.status === true) {
         navigation.navigate('OTPscreen', { OTP: response.otp, number: phone });
         await AsyncStorage.setItem('number', phone);
+        await showWelcomeNotification();
       } else {
         setLoading(false);
         Alert.alert(response?.message || 'Something went wrong');
@@ -61,6 +63,32 @@ const Login = ({ route }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const showWelcomeNotification = async () => {
+    // Channel create karo (sound yaha bhi define kar sakte ho)
+    const channelId = await notifee.createChannel({
+      id: 'default',
+      name: 'Default Channel',
+      importance: AndroidImportance.HIGH,
+      sound: 'sound', // ✅ yaha sound add
+    });
+
+    await notifee.displayNotification({
+      title: 'Welcome 👋',
+      body: 'Welcome to AC Technician App, enjoy the services',
+      android: {
+        channelId,
+        smallIcon: 'ic_launcher_foreground',
+        sound: 'sound', // ✅ yaha bhi sound ensure karo
+        pressAction: {
+          id: 'sound',
+        },
+      },
+      ios: {
+        sound: 'sound.wav', // ✅ iOS ke liye
+      },
+    });
   };
 
   return (

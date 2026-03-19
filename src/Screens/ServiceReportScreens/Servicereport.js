@@ -143,7 +143,17 @@ const Servicereport = ({ route }) => {
     GetMaterailList();
   }, []);
   const [Materialdata, setMaterialdata] = useState([]);
-
+  const isFormValid = () =>
+    serviceData.every(
+      item =>
+        item.ACBrand &&
+        item.year &&
+        item.TypeOfAc &&
+        item.tr &&
+        item.inverter &&
+        item.ServiceType &&
+        item.jobStatus,
+    );
   const GetMaterailList = async () => {
     const token = await AsyncStorage.getItem('ACCESS_TOKEN');
 
@@ -256,6 +266,7 @@ const Servicereport = ({ route }) => {
         email: '',
       },
       acs: servData,
+      paidAmount: AmountValue,
     };
   };
 
@@ -303,7 +314,7 @@ const Servicereport = ({ route }) => {
     const finalData = preparePayload();
     const token = await AsyncStorage.getItem('ACCESS_TOKEN');
 
-    console.log('finalData', finalData);
+    console.log('finalData------==========+++++++++++++', finalData);
     try {
       const res = await apiService.post(
         '/technician/serviceReport/create',
@@ -327,6 +338,7 @@ const Servicereport = ({ route }) => {
 
     // return
   };
+  // const isDisabled = !AmountValue || AmountValue.trim() === '';
 
   const centeralService = async () => {
     setLoading(true);
@@ -342,6 +354,7 @@ const Servicereport = ({ route }) => {
           },
         },
       );
+      console.log(res, 'response cetrilze services');
       if (res?.status === 'success') {
         navigation.dispatch(
           CommonActions.reset({
@@ -361,6 +374,8 @@ const Servicereport = ({ route }) => {
       setLoading(false);
     }
   };
+  const [activeInput, setActiveInput] = useState(null);
+  const [AmountValue, setAmountValue] = useState('');
   const onQuantityChange_new = (text, index, ind) => {
     setServiceData(prevData =>
       prevData.map((item, i) => {
@@ -890,41 +905,140 @@ const Servicereport = ({ route }) => {
         onPress={() => {
           setModelVisible(true);
         }}
-        // disabled={!isFormValid()}
+        disabled={!isFormValid()}
         title={i18n.t('Continue')}
         style={{ marginTop: 20 }}
         loading={Loading}
       />
-      <Modal visible={ModelVisible} transparent={true} animationType="slide">
-        <View
+      <Modal
+        onDismiss={() => setModelVisible(false)}
+        visible={ModelVisible}
+        transparent={true}
+        animationType="slide"
+      >
+        <TouchableOpacity
+          onPress={() => setModelVisible(false)}
+          activeOpacity={1}
           style={{
             flex: 1,
             justifyContent: 'flex-end',
-            alignItems: 'center',
+            // alignItems: 'center',
             backgroundColor: 'rgba(0,0,0,0.3)', // transparent background
           }}
         >
           <View
             style={{
               width: '100%',
+              borderTopWidth: 1,
+              borderTopColor: Colors?.primary,
+              borderLeftWidth: 1,
+              borderLeftColor: Colors?.primary,
+              borderRightWidth: 1,
+              borderRightColor: Colors?.primary,
               padding: 20,
               backgroundColor: Colors?.lightGray,
               borderTopLeftRadius: 20,
               borderTopRightRadius: 20,
-              alignItems: 'center',
+              paddingHorizontal: 20,
+              // alignItems: 'center',
             }}
           >
             <Text
               style={{
                 color: Colors?.white,
                 fontSize: rf(22),
+                alignSelf: 'center',
                 fontFamily: Fonts?.pop600,
+                paddingBottom: 10,
               }}
             >
               Payment
             </Text>
+            <TouchableOpacity
+              onPress={() => {
+                setActiveInput('complete');
+                setAmountValue('');
+              }}
+              style={[
+                newstyles?.PaymentContainer,
+                {
+                  borderColor:
+                    activeInput === 'complete'
+                      ? Colors?.primary
+                      : Colors?.white,
+                },
+              ]}
+            >
+              <Text style={newstyles?.PaymnetLabel}>Payment Complete</Text>
+            </TouchableOpacity>
+            {activeInput === 'complete' && (
+              <TextInput
+                value={AmountValue}
+                onChangeText={i => setAmountValue(i)}
+                placeholder="Enter Amount"
+                placeholderTextColor={Colors?.gray}
+                style={{
+                  fontSize: rf(14),
+                  fontFamily: Fonts?.pop600,
+                  borderColor: Colors?.primary,
+                  borderWidth: 1,
+                  marginTop: 10,
+                  color: Colors?.white,
+                  borderRadius: 12,
+
+                  padding: 10,
+                }}
+              />
+            )}
+            <TouchableOpacity
+              onPress={() => {
+                setActiveInput('pending');
+                setAmountValue('');
+              }}
+              style={[
+                newstyles?.PaymentContainer,
+                {
+                  borderColor:
+                    activeInput === 'pending' ? Colors?.primary : Colors?.white,
+                },
+              ]}
+            >
+              <Text style={newstyles?.PaymnetLabel}>Payment Pending</Text>
+            </TouchableOpacity>
+
+            {activeInput === 'pending' && (
+              <TextInput
+                value={AmountValue}
+                onChangeText={i => setAmountValue(i)}
+                placeholderTextColor={Colors?.gray}
+                placeholder="Enter Amount"
+                style={{
+                  fontSize: rf(14),
+                  color: Colors?.white,
+
+                  fontFamily: Fonts?.pop600,
+                  borderColor: Colors?.primary,
+                  borderWidth: 1,
+                  marginTop: 10,
+                  borderRadius: 12,
+                  padding: 10,
+                }}
+              />
+            )}
+            <PrimaryButton
+              onPress={onSubmit}
+              disabled={AmountValue.trim() === ''}
+              // disabled={true}
+              title={i18n.t('Continue')}
+              loading={Loading}
+              style={{
+                marginTop: 20,
+                marginBottom: 10,
+                // opacity: isDisabled ? 0.5 : 1, // optional UI effect
+              }}
+            />
           </View>
-        </View>
+        </TouchableOpacity>
       </Modal>
     </MainContainer>
   );
@@ -932,6 +1046,23 @@ const Servicereport = ({ route }) => {
 
 export default Servicereport;
 const newstyles = StyleSheet.create({
+  PaymnetLabel: {
+    color: Colors?.white,
+    fontSize: rf(16),
+    fontFamily: Fonts?.Pop400,
+  },
+  PaymentContainer: {
+    marginTop: 10,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    // backgroundColor: Colors?.lightGray,
+    borderWidth: 1,
+    width: '100%',
+    alignSelf: 'flex-start',
+    borderColor: Colors?.gray,
+  },
+
   textInputstyle: {
     borderWidth: 1,
     borderColor: Colors.gray,
